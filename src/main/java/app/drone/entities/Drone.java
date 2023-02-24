@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @Entity
 public class Drone {
@@ -23,8 +24,10 @@ public class Drone {
 	private String serialNumber;
 	@Enumerated(EnumType.STRING)
 	private DroneModel model;
+	@Min(value = 1, message = "The weight limit must be greater than 0.")
 	@Max(value = 500, message = "The weight limit cannot exceed 500gr.")
 	private float weightLimit;
+	@Min(value = 0, message = "The battery capacity cannot be negative .")
 	@Max(value = 100, message = "The battery capacity cannot exceed 100%.")
 	private int batteryCapacity;
 	@Enumerated(EnumType.STRING)
