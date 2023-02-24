@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.drone.controller.exceptions.DroneNotFoundException;
+import app.drone.controller.exceptions.DroneNotIdleException;
 import app.drone.controller.exceptions.MedicationNotFoundException;
 import app.drone.entities.Drone;
 import app.drone.entities.Medication;
@@ -78,6 +79,9 @@ public class DroneController {
 	@PutMapping("/drone/{id}/load")
 	Drone loadMedications(@PathVariable Long id, @RequestBody Long[] medications) {
 		Drone drone = repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id));
+		if (drone.getState() != DroneState.IDLE) {
+			throw new DroneNotIdleException(id, drone.getState());
+		}
 		drone.setState(DroneState.LOADING);
 		repository.save(drone);
 		drone.setMedications(new LinkedList<Medication>());
