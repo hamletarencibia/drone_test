@@ -2,6 +2,8 @@ package app.drone.entities;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
 import app.drone.entities.types.DroneModel;
 import app.drone.entities.types.DroneState;
 import jakarta.persistence.Entity;
@@ -10,16 +12,20 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.Max;
 
 @Entity
 public class Drone {
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Length(max = 100, message = "The serial number cannot exceed 100 characters.")
 	private String serialNumber;
 	@Enumerated(EnumType.STRING)
 	private DroneModel model;
+	@Max(value = 500, message = "The weight limit cannot exceed 500gr.")
 	private float weightLimit;
+	@Max(value = 100, message = "The battery capacity cannot exceed 100%.")
 	private int batteryCapacity;
 	@Enumerated(EnumType.STRING)
 	private DroneState state;

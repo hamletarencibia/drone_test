@@ -1,43 +1,40 @@
 package app.drone.controller.advice;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import app.drone.controller.exceptions.DroneLowBatteryException;
 import app.drone.controller.exceptions.DroneNotFoundException;
 import app.drone.controller.exceptions.DroneNotIdleException;
 import app.drone.controller.exceptions.DroneWeightLimitExcededException;
+import app.drone.utils.CustomError;
+import app.drone.utils.CustomErrorFactory;
 
 @RestControllerAdvice
 public class DroneAdvice {
-	@ResponseBody
 	@ExceptionHandler(DroneNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	String droneNotFound(DroneNotFoundException exception) {
-		return exception.getMessage();
+	ResponseEntity<CustomError> droneNotFound(DroneNotFoundException exception) {
+		return new ResponseEntity<>(CustomErrorFactory.getCustomError(exception, HttpStatus.NOT_FOUND),
+				HttpStatus.NOT_FOUND);
 	}
 
-	@ResponseBody
 	@ExceptionHandler(DroneNotIdleException.class)
-	@ResponseStatus(HttpStatus.CONFLICT)
-	String droneNotidle(DroneNotIdleException exception) {
-		return exception.getMessage();
+	ResponseEntity<CustomError> droneNotidle(DroneNotIdleException exception) {
+		return new ResponseEntity<>(CustomErrorFactory.getCustomError(exception, HttpStatus.CONFLICT),
+				HttpStatus.CONFLICT);
 	}
 
-	@ResponseBody
 	@ExceptionHandler(DroneWeightLimitExcededException.class)
-	@ResponseStatus(HttpStatus.CONFLICT)
-	String droneWeightLimitExceded(DroneWeightLimitExcededException exception) {
-		return exception.getMessage();
+	ResponseEntity<CustomError> droneWeightLimitExceded(DroneWeightLimitExcededException exception) {
+		return new ResponseEntity<>(CustomErrorFactory.getCustomError(exception, HttpStatus.CONFLICT),
+				HttpStatus.CONFLICT);
 	}
 
-	@ResponseBody
 	@ExceptionHandler(DroneLowBatteryException.class)
-	@ResponseStatus(HttpStatus.CONFLICT)
-	String droneLowBattery(DroneLowBatteryException exception) {
-		return exception.getMessage();
+	ResponseEntity<CustomError> droneLowBattery(DroneLowBatteryException exception) {
+		return new ResponseEntity<>(CustomErrorFactory.getCustomError(exception, HttpStatus.CONFLICT),
+				HttpStatus.CONFLICT);
 	}
 }
