@@ -52,4 +52,9 @@ public class DroneController {
 	void delete(@PathVariable Long id) {
 		repository.deleteById(id);
 	}
+
+	@GetMapping("/drone/{id}/battery")
+	int getBattery(@PathVariable Long id) {
+		return repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id)).getBatteryCapacity();
+	}
 }
