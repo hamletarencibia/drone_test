@@ -1,5 +1,7 @@
 package app.drone.entities;
 
+import java.util.List;
+
 import app.drone.entities.types.DroneModel;
 import app.drone.entities.types.DroneState;
 import jakarta.persistence.Entity;
@@ -7,6 +9,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Drone {
@@ -20,16 +23,20 @@ public class Drone {
 	private int batteryCapacity;
 	@Enumerated(EnumType.STRING)
 	private DroneState state;
+	@ManyToMany
+	private List<Medication> medications;
 
 	public Drone() {
 	}
 
-	public Drone(String serialNumber, DroneModel model, float weightLimit, int batteryCapacity, DroneState state) {
+	public Drone(String serialNumber, DroneModel model, float weightLimit, int batteryCapacity, DroneState state,
+			List<Medication> medications) {
 		this.serialNumber = serialNumber;
 		this.model = model;
 		this.weightLimit = weightLimit;
 		this.batteryCapacity = batteryCapacity;
 		this.state = state;
+		this.medications = medications;
 	}
 
 	public Long getId() {
@@ -74,5 +81,13 @@ public class Drone {
 
 	public void setState(DroneState state) {
 		this.state = state;
+	}
+
+	public List<Medication> getMedications() {
+		return medications;
+	}
+
+	public void setMedications(List<Medication> medications) {
+		this.medications = medications;
 	}
 }
