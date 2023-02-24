@@ -1,5 +1,6 @@
 package app.drone.controller;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,17 +12,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.drone.controller.exceptions.DroneNotFoundException;
+import app.drone.controller.exceptions.MedicationNotFoundException;
 import app.drone.entities.Drone;
 import app.drone.entities.Medication;
 import app.drone.entities.types.DroneState;
 import app.drone.repositories.DroneRepository;
+import app.drone.repositories.MedicationRepository;
 
 @RestController
 public class DroneController {
 	private final DroneRepository repository;
+	private final MedicationRepository medRepository;
 
-	DroneController(DroneRepository repository) {
+	DroneController(DroneRepository repository, MedicationRepository medRepository) {
 		this.repository = repository;
+		this.medRepository = medRepository;
 	}
 
 	@GetMapping("/drone")
@@ -68,5 +73,20 @@ public class DroneController {
 	@GetMapping("/drone/{id}/medications")
 	List<Medication> getMedications(@PathVariable Long id) {
 		return repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id)).getMedications();
+	}
+
+	@PutMapping("/drone/{id}/load")
+	Drone loadMedications(@PathVariable Long id, @RequestBody Long[] medications) {
+		Drone drone = repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id));
+		drone.setState(DroneState.LOADING);
+		repository.save(drone);
+		drone.setMedications(new LinkedList<Medication>());
+		for (Long medicationId : medications) {
+			Medication medication = medRepository.findById(medicationId)
+					.orElseThrow(() -> new MedicationNotFoundException(medicationId));
+			drone.getMedications().add(medication);
+		}
+		drone.setState(DroneState.LOADED);
+		return repository.save(drone);
 	}
 }
