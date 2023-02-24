@@ -39,6 +39,9 @@ public class DroneController {
 
 	@PostMapping("/drone")
 	Drone create(@RequestBody Drone drone) {
+		if (drone.getBatteryCapacity() < 25 && drone.getState() == DroneState.LOADING) {
+			throw new DroneLowBatteryException(drone.getBatteryCapacity());
+		}
 		drone.setMedications(new LinkedList<Medication>());
 		return repository.save(drone);
 	}
@@ -83,10 +86,10 @@ public class DroneController {
 	Drone loadMedications(@PathVariable Long id, @RequestBody Long[] medications) {
 		Drone drone = repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id));
 		if (drone.getState() != DroneState.IDLE) {
-			throw new DroneNotIdleException(id, drone.getState());
+			throw new DroneNotIdleException(drone.getState());
 		}
 		if (drone.getBatteryCapacity() < 25) {
-			throw new DroneLowBatteryException(id, drone.getBatteryCapacity());
+			throw new DroneLowBatteryException(drone.getBatteryCapacity());
 		}
 		drone.setState(DroneState.LOADING);
 		repository.save(drone);
@@ -99,7 +102,7 @@ public class DroneController {
 			medicationWeight += medication.getWeight();
 		}
 		if (medicationWeight > drone.getWeightLimit()) {
-			throw new DroneWeightLimitExcededException(id, drone.getWeightLimit(), medicationWeight);
+			throw new DroneWeightLimitExcededException(drone.getWeightLimit(), medicationWeight);
 		}
 		drone.setState(DroneState.LOADED);
 		return repository.save(drone);
