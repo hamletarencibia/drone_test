@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.drone.controller.exceptions.DroneNotFoundException;
 import app.drone.entities.Drone;
+import app.drone.entities.Medication;
 import app.drone.entities.types.DroneState;
 import app.drone.repositories.DroneRepository;
 
@@ -62,5 +63,10 @@ public class DroneController {
 	@GetMapping("/available-drones")
 	List<Drone> findAvailable() {
 		return repository.findByState(DroneState.IDLE);
+	}
+
+	@GetMapping("/drone/{id}/medications")
+	List<Medication> getMedications(@PathVariable Long id) {
+		return repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id)).getMedications();
 	}
 }
