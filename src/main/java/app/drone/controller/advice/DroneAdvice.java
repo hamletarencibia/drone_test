@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import app.drone.controller.exceptions.DroneNotFoundException;
 import app.drone.controller.exceptions.DroneNotIdleException;
+import app.drone.controller.exceptions.DroneWeightLimitExcededException;
 
 @RestControllerAdvice
 public class DroneAdvice {
@@ -22,6 +23,13 @@ public class DroneAdvice {
 	@ExceptionHandler(DroneNotIdleException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	String droneNotidle(DroneNotIdleException exception) {
+		return exception.getMessage();
+	}
+
+	@ResponseBody
+	@ExceptionHandler(DroneWeightLimitExcededException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	String droneCapacityExceded(DroneWeightLimitExcededException exception) {
 		return exception.getMessage();
 	}
 }

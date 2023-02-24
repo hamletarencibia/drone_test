@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.drone.controller.exceptions.DroneNotFoundException;
 import app.drone.controller.exceptions.DroneNotIdleException;
+import app.drone.controller.exceptions.DroneWeightLimitExcededException;
 import app.drone.controller.exceptions.MedicationNotFoundException;
 import app.drone.entities.Drone;
 import app.drone.entities.Medication;
@@ -85,10 +86,15 @@ public class DroneController {
 		drone.setState(DroneState.LOADING);
 		repository.save(drone);
 		drone.setMedications(new LinkedList<Medication>());
+		float medicationWeight = 0;
 		for (Long medicationId : medications) {
 			Medication medication = medRepository.findById(medicationId)
 					.orElseThrow(() -> new MedicationNotFoundException(medicationId));
 			drone.getMedications().add(medication);
+			medicationWeight += medication.getWeight();
+		}
+		if (medicationWeight > drone.getWeightLimit()) {
+			throw new DroneWeightLimitExcededException(id, drone.getWeightLimit(), medicationWeight);
 		}
 		drone.setState(DroneState.LOADED);
 		return repository.save(drone);
