@@ -14,17 +14,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Drone {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@NotNull(message = "You must provide a serial number.")
 	@Length(max = 100, message = "The serial number cannot exceed 100 characters.")
 	private String serialNumber;
-	@NotNull(message = "You must provide a model.")
 	@Enumerated(EnumType.STRING)
 	private DroneModel model;
 	@Min(value = 1, message = "The weight limit must be greater than 0.")
@@ -33,7 +30,6 @@ public class Drone {
 	@Min(value = 0, message = "The battery capacity cannot be negative .")
 	@Max(value = 100, message = "The battery capacity cannot exceed 100%.")
 	private int batteryCapacity;
-	@NotNull(message = "You must provide a state.")
 	@Enumerated(EnumType.STRING)
 	private DroneState state;
 	@ManyToMany
@@ -42,12 +38,8 @@ public class Drone {
 	public Drone() {
 	}
 
-	public Drone(@Length(max = 100, message = "The serial number cannot exceed 100 characters.") String serialNumber,
-			DroneModel model,
-			@Min(value = 1, message = "The weight limit must be greater than 0.") @Max(value = 500, message = "The weight limit cannot exceed 500gr.") float weightLimit,
-			@Min(value = 0, message = "The battery capacity cannot be negative .") @Max(value = 100, message = "The battery capacity cannot exceed 100%.") int batteryCapacity,
-			DroneState state, List<Medication> medications) {
-		super();
+	public Drone(String serialNumber, DroneModel model, float weightLimit, int batteryCapacity, DroneState state,
+			List<Medication> medications) {
 		this.serialNumber = serialNumber;
 		this.model = model;
 		this.weightLimit = weightLimit;
