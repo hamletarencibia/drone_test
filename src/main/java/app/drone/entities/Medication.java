@@ -26,8 +26,11 @@ public class Medication {
 	public Medication() {
 	}
 
-	public Medication(String name, @Min(value = 1, message = "The weight must be greater than 0.") float weight,
-			String code, String image) {
+	public Medication(
+			@NotNull(message = "You must provide a name.") @Pattern(regexp = "^([0-9A-Za-z\\-_]+)$", message = "Invalid name. Allowed only letters, numbers, '-', '_'.") String name,
+			@Min(value = 1, message = "The weight must be greater than 0.") float weight,
+			@NotNull(message = "You must provide a code.") @Pattern(regexp = "^([0-9A-Z_]+)$", message = "Invalid code. Allowed only upper case letters, underscore and numbers.") String code,
+			@NotNull(message = "You must provide an image.") String image) {
 		super();
 		this.name = name;
 		this.weight = weight;

@@ -42,11 +42,12 @@ public class Drone {
 	public Drone() {
 	}
 
-	public Drone(@Length(max = 100, message = "The serial number cannot exceed 100 characters.") String serialNumber,
-			DroneModel model,
+	public Drone(
+			@NotNull(message = "You must provide a serial number.") @Length(max = 100, message = "The serial number cannot exceed 100 characters.") String serialNumber,
+			@NotNull(message = "You must provide a model.") DroneModel model,
 			@Min(value = 1, message = "The weight limit must be greater than 0.") @Max(value = 500, message = "The weight limit cannot exceed 500gr.") float weightLimit,
 			@Min(value = 0, message = "The battery capacity cannot be negative .") @Max(value = 100, message = "The battery capacity cannot exceed 100%.") int batteryCapacity,
-			DroneState state, List<Medication> medications) {
+			@NotNull(message = "You must provide a state.") DroneState state, List<Medication> medications) {
 		super();
 		this.serialNumber = serialNumber;
 		this.model = model;
