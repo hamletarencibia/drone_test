@@ -39,6 +39,7 @@ public class DroneController {
 
 	@PostMapping("/drone")
 	Drone create(@RequestBody Drone drone) {
+		drone.setMedications(new LinkedList<Medication>());
 		return repository.save(drone);
 	}
 
