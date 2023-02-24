@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.drone.controller.exceptions.DroneLowBatteryException;
 import app.drone.controller.exceptions.DroneNotFoundException;
 import app.drone.controller.exceptions.DroneNotIdleException;
 import app.drone.controller.exceptions.DroneWeightLimitExcededException;
@@ -82,6 +83,9 @@ public class DroneController {
 		Drone drone = repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id));
 		if (drone.getState() != DroneState.IDLE) {
 			throw new DroneNotIdleException(id, drone.getState());
+		}
+		if (drone.getBatteryCapacity() < 25) {
+			throw new DroneLowBatteryException(id, drone.getBatteryCapacity());
 		}
 		drone.setState(DroneState.LOADING);
 		repository.save(drone);

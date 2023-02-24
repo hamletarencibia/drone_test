@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import app.drone.controller.exceptions.DroneLowBatteryException;
 import app.drone.controller.exceptions.DroneNotFoundException;
 import app.drone.controller.exceptions.DroneNotIdleException;
 import app.drone.controller.exceptions.DroneWeightLimitExcededException;
@@ -29,7 +30,14 @@ public class DroneAdvice {
 	@ResponseBody
 	@ExceptionHandler(DroneWeightLimitExcededException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	String droneCapacityExceded(DroneWeightLimitExcededException exception) {
+	String droneWeightLimitExceded(DroneWeightLimitExcededException exception) {
+		return exception.getMessage();
+	}
+
+	@ResponseBody
+	@ExceptionHandler(DroneLowBatteryException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	String droneLowBattery(DroneLowBatteryException exception) {
 		return exception.getMessage();
 	}
 }
