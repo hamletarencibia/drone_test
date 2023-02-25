@@ -2,6 +2,7 @@ package app.drone.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import jakarta.validation.constraints.Pattern;
 @Entity
 public class Medication {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotNull(message = "You must provide a name.")
 	@Pattern(regexp = "^([0-9A-Za-z\\-_]+)$", message = "Invalid name. Allowed only letters, numbers, '-', '_'.")
