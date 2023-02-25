@@ -39,9 +39,6 @@ public class DroneController {
 
 	@PostMapping("/drone")
 	Drone create(@RequestBody Drone drone) {
-		if (drone.getBatteryCapacity() < 25 && drone.getState() == DroneState.LOADING) {
-			throw new DroneLowBatteryException(drone.getBatteryCapacity());
-		}
 		drone.setMedications(new LinkedList<Medication>());
 		return repository.save(drone);
 	}

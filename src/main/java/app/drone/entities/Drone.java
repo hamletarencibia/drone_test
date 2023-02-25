@@ -10,8 +10,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -19,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 public class Drone {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotNull(message = "You must provide a serial number.")
 	@Length(max = 100, message = "The serial number cannot exceed 100 characters.")
@@ -107,5 +110,11 @@ public class Drone {
 
 	public void setMedications(List<Medication> medications) {
 		this.medications = medications;
+	}
+
+	@Transient
+	@AssertTrue(message = "The drone cannot start loading with battery bellow 25%.")
+	public boolean isStateAllowed() {
+		return (batteryCapacity >= 25 && state == DroneState.LOADING) || state != DroneState.LOADING;
 	}
 }
