@@ -24,7 +24,7 @@ public class BatteryCheck {
 		this.repository = repository;
 	}
 
-	@Scheduled(fixedRate = 5000) // Every 5 minutes
+	@Scheduled(fixedRate = 300000) // Every 5 minutes
 	public void reportDronesBattery() {
 		List<Drone> drones = repository.findAll();
 		drones.forEach((drone) -> {
