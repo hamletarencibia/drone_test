@@ -1,5 +1,8 @@
-package app.drone;
+package app.drone.test.controller;
 
+import static app.drone.test.mocks.MedicationsMock.MED_1;
+import static app.drone.test.mocks.MedicationsMock.MED_2;
+import static app.drone.test.mocks.MedicationsMock.MED_3;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -40,10 +43,6 @@ public class MedicationControllerTest {
 	@MockBean
 	MedicationRepository medicationRepository;
 
-	Medication MED_1 = new Medication(1L, "Cefixime-200", 200, "CEFIXIME_200", "Image-1.png");
-	Medication MED_2 = new Medication(2L, "Aspirine-300", 300, "ASPIRINE_300", "Image-2.png");
-	Medication MED_3 = new Medication(3L, "Cefalexine-250", 250, "CEFALEXINE_250", "Image-3.png");
-
 	@Test
 	public void all_success() throws Exception {
 		List<Medication> medications = new ArrayList<>(Arrays.asList(MED_1, MED_2, MED_3));
@@ -54,7 +53,7 @@ public class MedicationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON);
 
 		mock.perform(request).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)))
-				.andExpect(jsonPath("$[1].name", is("Aspirine-300")));
+				.andExpect(jsonPath("$[1].name", is(MED_2.getName())));
 	}
 
 	@Test
@@ -65,7 +64,7 @@ public class MedicationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON);
 
 		mock.perform(request).andExpect(status().isOk()).andExpect(jsonPath("$", notNullValue()))
-				.andExpect(jsonPath("$.name", is("Cefixime-200")));
+				.andExpect(jsonPath("$.name", is(MED_1.getName())));
 	}
 
 	@Test
