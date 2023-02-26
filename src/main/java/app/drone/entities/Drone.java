@@ -45,13 +45,14 @@ public class Drone {
 	public Drone() {
 	}
 
-	public Drone(
+	public Drone(Long id,
 			@NotNull(message = "You must provide a serial number.") @Length(max = 100, message = "The serial number cannot exceed 100 characters.") String serialNumber,
 			@NotNull(message = "You must provide a model.") DroneModel model,
 			@Min(value = 1, message = "The weight limit must be greater than 0.") @Max(value = 500, message = "The weight limit cannot exceed 500gr.") float weightLimit,
 			@Min(value = 0, message = "The battery capacity cannot be negative .") @Max(value = 100, message = "The battery capacity cannot exceed 100%.") int batteryCapacity,
 			@NotNull(message = "You must provide a state.") DroneState state, List<Medication> medications) {
 		super();
+		this.id = id;
 		this.serialNumber = serialNumber;
 		this.model = model;
 		this.weightLimit = weightLimit;
@@ -116,5 +117,31 @@ public class Drone {
 	@AssertTrue(message = "The drone cannot start loading with battery bellow 25%.")
 	public boolean isStateAllowed() {
 		return (batteryCapacity >= 25 && state == DroneState.LOADING) || state != DroneState.LOADING;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof Drone)) {
+			return false;
+		}
+		if ((this.id != ((Drone) object).getId())) {
+			return false;
+		}
+		if (!(this.serialNumber.equals(((Drone) object).getSerialNumber()))) {
+			return false;
+		}
+		if (!(this.model.equals(((Drone) object).getModel()))) {
+			return false;
+		}
+		if (this.weightLimit != ((Drone) object).getWeightLimit()) {
+			return false;
+		}
+		if (this.batteryCapacity != ((Drone) object).getBatteryCapacity()) {
+			return false;
+		}
+		if (!(this.state.equals(((Drone) object).getState()))) {
+			return false;
+		}
+		return true;
 	}
 }

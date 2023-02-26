@@ -27,12 +27,13 @@ public class Medication {
 	public Medication() {
 	}
 
-	public Medication(
+	public Medication(Long id,
 			@NotNull(message = "You must provide a name.") @Pattern(regexp = "^([0-9A-Za-z\\-_]+)$", message = "Invalid name. Allowed only letters, numbers, '-', '_'.") String name,
 			@Min(value = 1, message = "The weight must be greater than 0.") float weight,
 			@NotNull(message = "You must provide a code.") @Pattern(regexp = "^([0-9A-Z_]+)$", message = "Invalid code. Allowed only upper case letters, underscore and numbers.") String code,
 			@NotNull(message = "You must provide an image.") String image) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.weight = weight;
 		this.code = code;
@@ -73,6 +74,29 @@ public class Medication {
 
 	public Long getId() {
 		return id;
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (!(object instanceof Medication)) {
+			return false;
+		}
+		if ((this.id != ((Medication) object).getId())) {
+			return false;
+		}
+		if (!(this.name.equals(((Medication) object).getName()))) {
+			return false;
+		}
+		if (this.weight != ((Medication) object).getWeight()) {
+			return false;
+		}
+		if (!(this.code.equals(((Medication) object).getCode()))) {
+			return false;
+		}
+		if (!(this.image.equals(((Medication) object).getImage()))) {
+			return false;
+		}
+		return true;
 	}
 
 }
