@@ -1,5 +1,6 @@
 package app.drone.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.validator.constraints.Length;
@@ -50,7 +51,7 @@ public class Drone {
 			@NotNull(message = "You must provide a model.") DroneModel model,
 			@Min(value = 1, message = "The weight limit must be greater than 0.") @Max(value = 500, message = "The weight limit cannot exceed 500gr.") float weightLimit,
 			@Min(value = 0, message = "The battery capacity cannot be negative .") @Max(value = 100, message = "The battery capacity cannot exceed 100%.") int batteryCapacity,
-			@NotNull(message = "You must provide a state.") DroneState state, List<Medication> medications) {
+			@NotNull(message = "You must provide a state.") DroneState state) {
 		super();
 		this.id = id;
 		this.serialNumber = serialNumber;
@@ -58,7 +59,7 @@ public class Drone {
 		this.weightLimit = weightLimit;
 		this.batteryCapacity = batteryCapacity;
 		this.state = state;
-		this.medications = medications;
+		this.medications = new ArrayList<Medication>();
 	}
 
 	public Long getId() {
