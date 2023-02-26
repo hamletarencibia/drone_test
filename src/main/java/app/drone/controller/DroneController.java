@@ -62,6 +62,7 @@ public class DroneController {
 
 	@DeleteMapping("/drone/{id}")
 	void delete(@PathVariable Long id) {
+		repository.findById(id).orElseThrow(() -> new DroneNotFoundException(id));
 		repository.deleteById(id);
 	}
 
