@@ -1,5 +1,6 @@
 package app.drone.controller;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class DroneController {
 
 	@PostMapping("/drone")
 	Drone create(@RequestBody Drone drone) {
-		drone.setMedications(new LinkedList<Medication>());
+		drone.setMedications(new ArrayList<Medication>());
 		return repository.save(drone);
 	}
 
