@@ -40,6 +40,7 @@ public class MedicationController {
 	@PutMapping("/medication/{id}")
 	Medication update(@PathVariable Long id, @RequestBody Medication newMedication) {
 		Medication medication = repository.findById(id).orElseThrow(() -> new MedicationNotFoundException(id));
+		medication.setName(newMedication.getName());
 		medication.setCode(newMedication.getCode());
 		medication.setImage(newMedication.getImage());
 		medication.setWeight(newMedication.getWeight());
