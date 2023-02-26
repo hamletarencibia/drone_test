@@ -49,6 +49,7 @@ public class MedicationController {
 
 	@DeleteMapping("/medication/{id}")
 	void delete(@PathVariable Long id) {
+		repository.findById(id).orElseThrow(() -> new MedicationNotFoundException(id));
 		repository.deleteById(id);
 	}
 }
