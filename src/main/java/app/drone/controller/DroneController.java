@@ -1,7 +1,6 @@
 package app.drone.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -90,9 +89,7 @@ public class DroneController {
 		if (drone.getBatteryCapacity() < 25) {
 			throw new DroneLowBatteryException(drone.getBatteryCapacity());
 		}
-		drone.setState(DroneState.LOADING);
-		repository.save(drone);
-		drone.setMedications(new LinkedList<Medication>());
+		drone.setMedications(new ArrayList<Medication>());
 		float medicationWeight = 0;
 		for (Long medicationId : medications) {
 			Medication medication = medRepository.findById(medicationId)
